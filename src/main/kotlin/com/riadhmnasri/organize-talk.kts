@@ -5,3 +5,8 @@ organize talk {
     speakers include "Riadh" and "Romain"
     participants include "Dimitri" and "Cyril" and "Mohamed" and "Sonia" and "Isabelle"
 }
+
+
+
+
+
