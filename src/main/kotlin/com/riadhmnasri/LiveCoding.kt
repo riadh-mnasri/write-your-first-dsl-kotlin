@@ -8,47 +8,46 @@ fun main() {
     println(kotlinBook + dslBook)
 
     // type alias
-    mytasks name "DSL Todo list"
+    mytasks name "Talk prep todolist"
 
-    // lambda Out of parentheses
-    println(transform("Hello DevCon") { it.uppercase() })
+    // lambda Out of parentheses // transform
+    println(transform("Hello Kotlin") { t -> t.uppercase() })
 
     // Infix functions
-    println("Hello Kotlin" assertEquals "Hello")
-    println("Hello" assertEquals "Hello")
+    println("Hello Kotlin" shouldBeEqual "Hello Kotlin")
+    println("Hello" shouldBeEqual "Hello Kotlin")
 
     // Extension functions
     println(kotlinBook.rate(5))
 
-    // Lambda with receiver
-   kotlinBook.apply {
-        println(title.uppercase())
-    }
+    // Lambda with receiver // apply Book
+    kotlinBook.applyC { println(title.uppercase()) }
 
     // Demo DSL
 
 }
 
-fun Book.apply(f: Book.() -> Unit): Book{
+private fun Book.applyC(f: Book.() -> Unit): Book {
     f()
     return this
 }
 
-private infix fun String.assertEquals(text: String): Boolean {
+private fun Book.rate(note: Int) = "*".repeat(note)
+
+private infix fun String.shouldBeEqual(text: String): Boolean {
     return this == text
 }
 
-private fun Book.rate(note: Int): String = "*".repeat(note)
+fun transform(text: String, f: (String) -> String): String {
+    return f(text)
+}
+
+private operator fun Book.plus(book: Book): Book {
+    return Book(this.id + " - " + book.id, this.title + " - " + book.title, this.price + book.price)
+
+}
 
 data class Book(val id: String, val title: String, val price: Double) {}
-
-operator fun Book.plus(book: Book): Book {
-    return Book(this.id + " - " + book.id, this.title + " - " + book.title, this.price + book.price)
-}
-
-fun transform(text: String, block: (String) -> String): String {
-    return block(text)
-}
 
 typealias mytasks = TodoList
 
