@@ -4,50 +4,56 @@ package com.riadhmnasri
 fun main() {
     // Operator overloading
     val kotlinBook = Book("id1", "Programming Kotlin", 40.0)
-    val javaBook = Book("id2", "Programmig Java", 35.0)
-    println(kotlinBook + javaBook)
+    val dslBook = Book("id2", "Kotlin DSL", 35.0)
+    println(kotlinBook + dslBook)
+
     // type alias
-    mytasks name "prepare conference"
+    mytasks name "DSL Todo list"
+
     // lambda Out of parentheses
-    println(transform("Hello Kotlin") { text -> text.uppercase() })
-    // Infix funnctions
+    println(transform("Hello DevCon") { it.uppercase() })
+
+    // Infix functions
     println("Hello Kotlin" assertEquals "Hello")
     println("Hello" assertEquals "Hello")
+
     // Extension functions
     println(kotlinBook.rate(5))
+
     // Lambda with receiver
-    Book("id1", "programming kotlin", 40.0).applyAndReturn { println(title.uppercase()) }
+   kotlinBook.apply {
+        println(title.uppercase())
+    }
+
+    // Demo DSL
+
 }
 
-fun Book.applyAndReturn(f: Book.() -> Unit): Book{
+fun Book.apply(f: Book.() -> Unit): Book{
     f()
     return this
 }
 
-fun Book.rate(note: Int): String{
-    return "*".repeat(note)
+private infix fun String.assertEquals(text: String): Boolean {
+    return this == text
 }
 
+private fun Book.rate(note: Int): String = "*".repeat(note)
 
-infix fun String.assertEquals(text: String): Boolean{
-    return  this == text
+data class Book(val id: String, val title: String, val price: Double) {}
+
+operator fun Book.plus(book: Book): Book {
+    return Book(this.id + " - " + book.id, this.title + " - " + book.title, this.price + book.price)
 }
 
-
-fun transform(text: String, supplier: (String) -> String): String {
-    return supplier(text)
+fun transform(text: String, block: (String) -> String): String {
+    return block(text)
 }
+
+typealias mytasks = TodoList
 
 object TodoList {
     infix fun name(text: String) {
         println("TodoList: $text")
     }
-}
-
-typealias mytasks = TodoList
-
-data class Book(val id: String, val title: String, val price: Double) {}
-
-operator fun Book.plus(book: Book): Book {
-    return Book(this.id + "-" + book.id, this.title + "-" + book.title, this.price + book.price)
 }
