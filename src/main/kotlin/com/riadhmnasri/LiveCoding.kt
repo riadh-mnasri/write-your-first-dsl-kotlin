@@ -17,8 +17,6 @@ fun main() {
     println(kotlinBook.rate(5))
     // Lambda with receiver
     Book("id1", "programming kotlin", 40.0).applyAndReturn { println(title.uppercase()) }
-    
-
 }
 
 fun Book.applyAndReturn(f: Book.() -> Unit): Book{
